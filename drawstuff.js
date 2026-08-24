@@ -182,7 +182,7 @@ function main() {
     
     // do the interpolation
     // for (var y=uly; y<=lly; y++) {
-    for (var y=uly; y<=uly; y++) {
+    for (var y=uly; y<=ulx; y++) {
         hc.copy(lc); // begin with the left color
         hcDelta.copy(rc).subtract(lc).scale(hDelta); // reset horiz color delta
         for (var x=ulx; x<=urx; x++) {
