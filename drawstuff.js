@@ -2,7 +2,7 @@
 
 // Color constructor
 class Color {
-
+    
         // Color constructor default opaque black
     constructor(r=0,g=0,b=0,a=255) {
         try {
@@ -16,7 +16,7 @@ class Color {
                 this.r = r; this.g = g; this.b = b; this.a = a; 
             }
         } // end try
-
+        
         catch (e) {
             console.log(e);
         }
@@ -36,12 +36,12 @@ class Color {
                 return(this);
             }
         } // end throw
-
+        
         catch (e) {
             console.log(e);
         }
     } // end Color change method
-
+    
         // Color add method
     add(c) {
         try {
@@ -52,12 +52,12 @@ class Color {
                 return(this);
             }
         } // end try
-
+        
         catch(e) {
             console.log(e);
         }
     } // end color add
-
+    
         // Color subtract method
     subtract(c) {
         try {
@@ -68,12 +68,12 @@ class Color {
                 return(this);
             }
         } // end try
-
+        
         catch(e) {
             console.log(e);
         }
     } // end color subgtract
-
+    
         // Color scale method
     scale(s) {
         try {
@@ -84,12 +84,12 @@ class Color {
                 return(this);
             }
         } // end throw
-
+        
         catch (e) {
             console.log(e);
         }
     } // end Color scale method
-
+    
         // Color copy method
     copy(c) {
         try {
@@ -100,24 +100,24 @@ class Color {
                 return(this);
             }
         } // end try
-
+        
         catch(e) {
             console.log(e);
         }
     } // end Color copy method
-
+    
         // Color clone method
     clone() {
         var newColor = new Color();
         newColor.copy(this);
         return(newColor);
     } // end Color clone method
-
+    
         // Send color to console
     toConsole() {
         console.log(this.r +" "+ this.g +" "+ this.b +" "+ this.a);
     }  // end Color toConsole
-
+    
 } // end color class
 
 
@@ -139,12 +139,12 @@ function drawPixel(imagedata,x,y,color) {
         } else 
             throw "drawpixel color is not a Color";
     } // end try
-
+    
     catch(e) {
         console.log(e);
     }
 } // end drawPixel
-
+    
 
 /* main -- here is where execution begins after window load */
 
@@ -156,34 +156,34 @@ function main() {
     var w = context.canvas.width; // as set in html
     var h = context.canvas.height;  // as set in html
     var imagedata = context.createImageData(w,h);
-
+ 
     // Define a rectangle in 2D with colors and coords at corners
-    var lbc = new Color(255,255,0,255); // left bottom color: yellow
-    var rbc = new Color(255,0,125,255); // right bottom corner color: pink
-    var mbc = new Color(0,255,255,255); // middle bottom corner color: cyan
-    var tc = new Color(255,0,255,255); // top color: magenta
-    var lbx = 50, lby = 150; // left bottom position
-    var rbx = 200, rby = 150; // right bottom position
-    var mbx = 125, mby = 150; // middle bottom position
-    var tx = 125, ty = 250; // top position
-
+    var ulc = new Color(255,255,0,255); // upper left corner color: yellow
+    var urc = new Color(255,0,125,255); // upper right corner color: pink
+    var llc = new Color(0,255,255,255); // lower left corner color: cyan
+    var lrc = new Color(255,0,255,255); // lower right corner color: magenta
+    var ulx = 50, uly = 50; // upper left corner position
+    var urx = 200, ury = 50; // upper right corner position
+    var llx = 50, lly = 150; // lower left corner position
+    var lrx = 200, lry = 150; // lower right corner position
+    
     // set up the vertical interpolation
-    var lc = lbc.clone();  // left color
-    var rc = rbc.clone();  // right color
-    var vDelta = 1 / (lby-rby); // norm'd vertical delta
-    var lcDelta = lbc.clone().subtract(mbc).scale(vDelta); // left vert color delta
-    var rcDelta = rbc.clone().subtract(mbc).scale(vDelta); // right vert color delta
+    var lc = ulc.clone();  // left color
+    var rc = urc.clone();  // right color
+    var vDelta = 1 / (lly-uly); // norm'd vertical delta
+    var lcDelta = llc.clone().subtract(ulc).scale(vDelta); // left vert color delta
+    var rcDelta = lrc.clone().subtract(urc).scale(vDelta); // right vert color delta
     
     // set up the horizontal interpolation
     var hc = new Color(); // horizontal color
-    var hDelta = 1 / (rbx-lbx); // norm'd horizontal delta
+    var hDelta = 1 / (urx-ulx); // norm'd horizontal delta
     var hcDelta = new Color(); // horizontal color delta
     
     // do the interpolation
-    for (var y=lby; y<=ty; y++) {
+    for (var y=uly; y<=lly; y++) {
         hc.copy(lc); // begin with the left color
         hcDelta.copy(rc).subtract(lc).scale(hDelta); // reset horiz color delta
-        for (var x=tx; x<=lbx; x++) {
+        for (var x=ulx; x<=urx; x++) {
             drawPixel(imagedata,x,y,hc);
             hc.add(hcDelta);
         } // end horizontal
